@@ -22,8 +22,8 @@ def file2img(file,flags = cv2.IMREAD_UNCHANGED):
 def hello_world():
     return render_template('demo.html')
 
-@app.route('/grayscale', methods=['POST'])
-def grayscale():
+@app.route('/gray', methods=['POST'])
+def gray():
     file = request.files['img']
     img = file2img(file)
     img = cv2.cvtColor( img, cv2.COLOR_RGB2GRAY )
