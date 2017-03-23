@@ -37,7 +37,7 @@ var form;
 var selectService = (name) => {
 	form.find('p[service]').hide();
 	form.find('p[service="'+name+'"]').show();
-	form.attr('action','?'+name);
+	form.attr('action','/'+name);
 };
 
 $(() => {
