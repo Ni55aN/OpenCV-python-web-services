@@ -1,0 +1,6 @@
+{
+  "name": "Computer vision services",
+  "description": "",
+  "image": "heroku/python",
+  "addons": [ "heroku-postgresql" ]
+}

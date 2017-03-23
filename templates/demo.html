@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>CV Services Demo</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+<link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+<script src="https://rawgit.com/markusslima/bootstrap-filestyle/master/src/bootstrap-filestyle.min.js"></script>
+
+<style>
+.container{
+	padding:20pt 14pt;
+	text-align: center;
+}
+
+noscript{
+	display:block;
+	padding: 12pt;
+	color: #b37;
+}
+
+.title{
+	margin-bottom: 40pt;
+}
+
+</style>
+
+<script>
+
+var select;
+var form;
+
+var selectService = (name) => {
+	form.find('p[service]').hide();
+	form.find('p[service="'+name+'"]').show();
+	form.attr('action','?'+name);
+};
+
+$(() => {
+	select = $('.selectpicker');
+	form = $('form');
+
+	select.on('changed.bs.select',function( event, clickedIndex, newValue, oldValue){
+		var val =  $(this).val();
+		selectService(val);
+		
+	});
+	
+	selectService('gray');
+});
+</script>
+
+</head>
+<body class="container">
+	<h3 class="title">CV Services Demo</h3>
+	<noscript class="alert alert-danger">
+	  Please, enable JavaScript in your browser
+	</noscript>
+	
+	
+			
+	<form action="#" method="POST"  enctype="multipart/form-data">
+		<div class="form-group col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+			<select class="selectpicker" class="form-control" >
+				<option value="grayscale">Grayscale</option>
+				<option value="threshold">Threshold</option>
+				<option value="blur">Blur</option>
+				<option value="edges">Canny edges</option>
+				<option value="fourier">Fourier</option>
+				<option value="harris">Harris</option>
+				<option value="sift">SIFT</option>
+				<option value="surf">SURF</option>
+				<option value="orb">ORB</option>
+				<option value="face">Face detection</option>
+				<option value="denoise">Denoise</option>
+				<option value="inpaint">Inpaint</option>
+			</select>
+		</div>
+		<div class="form-group col-md-4 col-md-offset-4">
+			<input type="file" name="img" class="filestyle" data-icon="false" data-buttonText="Select image">
+		</div>
+		<div class="form-group col-md-4 col-md-offset-4">
+			<p service="blur">
+				<input type="number" class="form-control" name="size">
+			</p>
+			<p service="inpaint">
+				<input type="file" class="filestyle" data-icon="false" data-buttonText="Select mask"  name="mask">
+			</p>
+		</div>
+		<div class="form-group col-md-4 col-md-offset-4">
+			<input type="submit" class="btn btn-default">
+		</div>
+	</form>
+	
+	<a href="https://github.com/Ni55aN/OpenCV-python-web-services"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>
