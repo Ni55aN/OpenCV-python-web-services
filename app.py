@@ -95,8 +95,8 @@ def sift():
     img = file2img(file)
     
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    sift = cv2.xfeatures2d.SIFT_create()
-    kp = sift.detect(gray,None)
+    siftdetector = cv2.xfeatures2d.SIFT_create()
+    kp = siftdetector.detect(gray,None)
 
     img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
@@ -109,8 +109,8 @@ def surf():
     img = file2img(file)
     
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    sift = cv2.xfeatures2d.SURF_create()
-    kp = sift.detect(gray,None)
+    surfdetector = cv2.xfeatures2d.SURF_create()
+    kp = surfdetector.detect(gray,None)
 
     img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
@@ -123,8 +123,8 @@ def orb():
     img = file2img(file)
     
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    sift = cv2.ORB_create(nfeatures=10000, scoreType=cv2.ORB_FAST_SCORE)
-    kp = sift.detect(gray,None)
+    orbdetector = cv2.ORB_create(nfeatures=10000, scoreType=cv2.ORB_FAST_SCORE)
+    kp = orbdetector.detect(gray,None)
 
     img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS)
 
