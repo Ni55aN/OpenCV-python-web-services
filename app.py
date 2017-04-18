@@ -1,7 +1,8 @@
 import os
-from flask import send_from_directory, abort, request,render_template
+from flask import send_from_directory, abort, request,render_template,jsonify
 from eve import Eve
 import cv2, numpy
+import json
 
 app = Eve(__name__)
 UPLOAD_FOLDER = os.getcwd()+'/images'
@@ -89,8 +90,21 @@ def harris():
     return send_from_directory(UPLOAD_FOLDER,TMP_NAME, as_attachment=False)
 
 
+
+def features2json(kp, des):
+    jsn = {"points":[],"width":0,"height":0}
+    my_list_len = len(kp)
+    for i in range(0, my_list_len):
+        jsn["points"].append({"x":kp[i].pt[0],"y":kp[i].pt[1],"descriptor":des[i].tolist()})
+  
+    return json.dumps(jsn)
+
+@app.route('/sift/json', methods=['POST'])
+def siftJson():
+    return sift(True)
+
 @app.route('/sift', methods=['POST'])
-def sift():
+def sift(json = False):
     file = request.files['img']
     img = file2img(file)
     
@@ -98,13 +112,20 @@ def sift():
     siftdetector = cv2.xfeatures2d.SIFT_create()
     kp = siftdetector.detect(gray,None)
 
-    img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    if(json):
+       kp, des = siftdetector.compute(gray, kp) 
+       return features2json(kp, des)
 
+    img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     cv2.imwrite(os.path.join(UPLOAD_FOLDER,TMP_NAME),img)
     return send_from_directory(UPLOAD_FOLDER,TMP_NAME, as_attachment=False)
+    
+@app.route('/surf/json', methods=['POST'])
+def surfJson():
+    return surf(True)
 
 @app.route('/surf', methods=['POST'])
-def surf():
+def surf(json = False):
     file = request.files['img']
     img = file2img(file)
     
@@ -112,13 +133,20 @@ def surf():
     surfdetector = cv2.xfeatures2d.SURF_create()
     kp = surfdetector.detect(gray,None)
 
-    img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    if(json):
+       kp, des = surfdetector.compute(gray, kp) 
+       return features2json(kp, des)
 
+    img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     cv2.imwrite(os.path.join(UPLOAD_FOLDER,TMP_NAME),img)
     return send_from_directory(UPLOAD_FOLDER,TMP_NAME, as_attachment=False)
 
+@app.route('/orb/json', methods=['POST'])
+def orbJson(json = False):
+    return orb(True)
+
 @app.route('/orb', methods=['POST'])
-def orb():
+def orb(json = False):
     file = request.files['img']
     img = file2img(file)
     
@@ -126,11 +154,13 @@ def orb():
     orbdetector = cv2.ORB_create(nfeatures=10000, scoreType=cv2.ORB_FAST_SCORE)
     kp = orbdetector.detect(gray,None)
 
-    img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS)
+    if(json):
+       kp, des = orbdetector.compute(gray, kp) 
+       return features2json(kp, des)
 
+    img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS)
     cv2.imwrite(os.path.join(UPLOAD_FOLDER,TMP_NAME),img)
     return send_from_directory(UPLOAD_FOLDER,TMP_NAME, as_attachment=False)
-
 
 
 @app.route('/face', methods=['POST'])
