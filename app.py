@@ -1,10 +1,13 @@
 import os
 from flask import send_from_directory, abort, request,render_template,jsonify
+from flask_cors import CORS, cross_origin
 from eve import Eve
 import cv2, numpy
 import json
 
+
 app = Eve(__name__)
+CORS(app)
 UPLOAD_FOLDER = os.getcwd()+'/images'
 PORT = int(os.environ.get("PORT", 5000))#5000
 HOST = '0.0.0.0'#'127.0.0.1'
