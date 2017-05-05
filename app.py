@@ -154,7 +154,7 @@ def orb(json = False):
     img = file2img(file)
     
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    orbdetector = cv2.ORB_create(nfeatures=10000, scoreType=cv2.ORB_FAST_SCORE)
+    orbdetector = cv2.ORB_create()
     kp = orbdetector.detect(gray,None)
 
     if(json):
