@@ -1,9 +1,10 @@
 import os
-from flask import send_from_directory, abort, request,render_template,jsonify
+from flask import send_from_directory, abort, request,render_template,jsonify,make_response
 from flask_cors import CORS, cross_origin
 from eve import Eve
 import cv2, numpy
 import json
+import time
 
 
 app = Eve(__name__)
@@ -113,11 +114,17 @@ def sift(json = False):
     
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     siftdetector = cv2.xfeatures2d.SIFT_create()
+    
+    start = time.time()
     kp = siftdetector.detect(gray,None)
 
     if(json):
        kp, des = siftdetector.compute(gray, kp) 
-       return features2json(kp, des)
+       elapsed = time.time()-start
+
+       resp = make_response(features2json(kp, des))
+       resp.headers.set('Elapsed-time',elapsed)
+       return resp
 
     img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     cv2.imwrite(os.path.join(UPLOAD_FOLDER,TMP_NAME),img)
@@ -134,11 +141,17 @@ def surf(json = False):
     
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     surfdetector = cv2.xfeatures2d.SURF_create()
+
+    start = time.time()
     kp = surfdetector.detect(gray,None)
 
     if(json):
        kp, des = surfdetector.compute(gray, kp) 
-       return features2json(kp, des)
+       elapsed = time.time()-start
+
+       resp = make_response(features2json(kp, des))
+       resp.headers.set('Elapsed-time',elapsed)
+       return resp
 
     img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     cv2.imwrite(os.path.join(UPLOAD_FOLDER,TMP_NAME),img)
@@ -155,11 +168,17 @@ def orb(json = False):
     
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     orbdetector = cv2.ORB_create()
+
+    start = time.time()
     kp = orbdetector.detect(gray,None)
 
     if(json):
        kp, des = orbdetector.compute(gray, kp) 
-       return features2json(kp, des)
+       elapsed = time.time()-start
+
+       resp = make_response(features2json(kp, des))
+       resp.headers.set('Elapsed-time',elapsed)
+       return resp
 
     img=cv2.drawKeypoints(gray,kp,cv2.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS)
     cv2.imwrite(os.path.join(UPLOAD_FOLDER,TMP_NAME),img)
